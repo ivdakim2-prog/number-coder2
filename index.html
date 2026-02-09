@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шифратор чисел</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4f46e5">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        .key-display {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        
+        .key-display h3 {
+            color: #4f46e5;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .key-pairs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .key-pair {
+            background: white;
+            border-radius: 8px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 18px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+        
+        .operation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .operation-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .encode-btn {
+            background: #4f46e5;
+            color: white;
+        }
+        
+        .decode-btn {
+            background: #10b981;
+            color: white;
+        }
+        
+        .operation-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .operation-btn.active {
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+        }
+        
+        .result-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        
+        .result-box h3 {
+color: #4f46e5;
+            margin-bottom: 10px;
+        }
+        
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            word-break: break-all;
+            color: #333;
+            min-height: 36px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .clear-btn {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .operation-buttons {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-code"></i> Шифратор чисел</h1>
+            <p>Преобразуйте числа по заданному ключу</p>
+        </div>
+        
+        <div class="key-display">
+            <h3><i class="fas fa-key"></i> Ключ замены:</h3>
+            <div class="key-pairs">
+                <div class="key-pair">1 → 6</div>
+                <div class="key-pair">2 → 5</div>
+                <div class="key-pair">3 → 0</div>
+                <div class="key-pair">4 → 3</div>
+                <div class="key-pair">5 → 1</div>
+                <div class="key-pair">6 → 2</div>
+                <div class="key-pair">7 → 4</div>
+                <div class="key-pair">8 → 9</div>
+                <div class="key-pair">9 → 8</div>
+                <div class="key-pair">0 → 7</div>
+            </div>
+        </div>
+        
+        <div class="input-group">
+            <label for="numberInput"><i class="fas fa-pencil-alt"></i> Введите число:</label>
+            <input type="text" id="numberInput" placeholder="Например: 1234567890" inputmode="numeric">
+        </div>
+        
+        <div class="operation-buttons">
+            <button class="operation-btn encode-btn active" id="encodeBtn">
+                <i class="fas fa-lock"></i> Закодировать
+            </button>
+            <button class="operation-btn decode-btn" id="decodeBtn">
+                <i class="fas fa-unlock"></i> Раскодировать
+            </button>
+        </div>
+        
+        <button class="operation-btn" id="transformBtn" style="background: #8b5cf6; color: white; width: 100%;">
+            <i class="fas fa-sync-alt"></i> Выполнить преобразование
+        </button>
+        
+        <div class="result-box">
+            <h3><i class="fas fa-result"></i> Результат:</h3>
+            <div id="result">—</div>
+        </div>
+        
+        <div class="action-buttons">
+            <button class="action-btn copy-btn" id="copyBtn">
+                <i class="far fa-copy"></i> Копировать
+            </button>
+            <button class="action-btn clear-btn" id="clearBtn">
+                <i class="fas fa-broom"></i> Очистить
+            </button>
+        </div>
+        
+        <div class="footer">
+            <p><i class="fas fa-info-circle"></i> Приложение работает полностью в вашем браузере. Никакие данные никуда не отправляются.</p>
+        </div>
+    </div>
+<script>
+        // Ключ замены
+        const key = {
+            '1': '0', '2': '9', '3': '8', '4': '7', '5': '6',
+            '6': '5', '7': '4', '8': '3', '9': '2', '0': '1'
+        };
+        
+        let currentOperation = 'encode'; // encode или decode
+        
+        // Элементы
+        const numberInput = document.getElementById('numberInput');
+        const encodeBtn = document.getElementById('encodeBtn');
+        const decodeBtn = document.getElementById('decodeBtn');
+        const transformBtn = document.getElementById('transformBtn');
+        const resultElement = document.getElementById('result');
+        const copyBtn = document.getElementById('copyBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        
+        // Функция преобразования
+        function transformNumber(input, operation) {
+            let result = '';
+            
+            for (let char of input.toString()) {
+                if (operation === 'encode') {
+                    // Кодировка: заменяем по ключу
+                    result += key[char] || char;
+                } else {
+                    // Декодировка: ищем ключ по значению
+                    const foundKey = Object.keys(key).find(k => key[k] === char);
+                    result += foundKey || char;
+                }
+            }
+            
+            return result;
+        }
+        
+        // Обработчики кнопок операций
+        encodeBtn.addEventListener('click', () => {
+            currentOperation = 'encode';
+            encodeBtn.classList.add('active');
+            decodeBtn.classList.remove('active');
+        });
+        
+        decodeBtn.addEventListener('click', () => {
+            currentOperation = 'decode';
+            decodeBtn.classList.add('active');
+            encodeBtn.classList.remove('active');
+        });
+        
+        // Основное преобразование
+        transformBtn.addEventListener('click', () => {
+            const input = numberInput.value.trim();
+            
+            if (!input) {
+                resultElement.textContent = 'Введите число';
+                resultElement.style.color = '#ef4444';
+                return;
+            }
+            
+            // Проверка, что введены только цифры
+            if (!/^\d+$/.test(input)) {
+                resultElement.textContent = 'Только цифры (0-9)!';
+                resultElement.style.color = '#ef4444';
+                return;
+            }
+            
+            const result = transformNumber(input, currentOperation);
+            resultElement.textContent = result;
+            resultElement.style.color = '#10b981';
+        });
+        
+        // Копирование результата
+        copyBtn.addEventListener('click', () => {
+            const resultText = resultElement.textContent;
+            
+            if (resultText === '—'  resultText.includes('Введите')  resultText.includes('Только')) {
+                alert('Сначала получите результат!');
+                return;
+            }
+            
+            navigator.clipboard.writeText(resultText)
+                .then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
+                    copyBtn.style.background = '#10b981';
+                    
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                        copyBtn.style.background = '#3b82f6';
+                    }, 2000);
+                });
+        });
+        
+        // Очистка
+        clearBtn.addEventListener('click', () => {
+            numberInput.value = '';
+            resultElement.textContent = '—';
+            resultElement.style.color = '#333';
+            numberInput.focus();
+        });
+// Обработка Enter
+        numberInput.addEventListener('keyup', (event) => {
+            if (event.key === 'Enter') {
+                transformBtn.click();
+            }
+        });
+        
+        // Манифест для PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(console.error);
+            });
+        }
+    </script>
+</body>
+</html>
