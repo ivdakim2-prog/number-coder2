@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Шифратор чисел</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .key-display {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .key-pairs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        
+        .key-pair {
+            background: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .operation-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .operation-btn {
+            flex: 1;
+            padding: 15px;
+            background: #e0e0e0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .operation-btn.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        #transformBtn {
+            width: 100%;
+            padding: 15px;
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        
+        .result-box {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            min-height: 30px;
+            word-break: break-all;
+            margin-top: 10px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        #copyBtn {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        #clearBtn {
+            background: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔐 Шифратор чисел</h1>
+        <p class="subtitle">Преобразование чисел по заданному ключу</p>
+        
+        <div class="key-display">
+            <strong>Ключ замены:</strong>
+            <div class="key-pairs">
+                <span class="key-pair">1 → 0</span>
+                <span class="key-pair">2 → 9</span>
+                <span class="key-pair">3 → 8</span>
+                <span class="key-pair">4 → 7</span>
+
+<span class="key-pair">5 → 6</span>
+                <span class="key-pair">6 → 5</span>
+                <span class="key-pair">7 → 4</span>
+                <span class="key-pair">8 → 3</span>
+                <span class="key-pair">9 → 2</span>
+                <span class="key-pair">0 → 1</span>
+            </div>
+        </div>
+        
+        <input type="text" id="numberInput" placeholder="Введите число (только цифры)">
+        
+        <div class="operation-buttons">
+            <button class="operation-btn active" id="encodeBtn">Закодировать</button>
+            <button class="operation-btn" id="decodeBtn">Раскодировать</button>
+        </div>
+        
+        <button id="transformBtn">🔄 Выполнить преобразование</button>
+        
+        <div class="result-box">
+            <strong>Результат:</strong>
+            <div id="result">—</div>
+        </div>
+        
+        <div class="action-buttons">
+            <button id="copyBtn">📋 Копировать</button>
+            <button id="clearBtn">🗑️ Очистить</button>
+        </div>
+    </div>
+
+    <script>
+        // ГАРАНТИРОВАННО РАБОЧИЙ КОД
+        console.log("=== ПРИЛОЖЕНИЕ ЗАПУЩЕНО ===");
+        
+        // Ждем полной загрузки страницы
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("1. DOM загружен");
+            
+            // Ключ шифрования
+            const key = {
+                '1': '0', '2': '9', '3': '8', '4': '7', '5': '6',
+                '6': '5', '7': '4', '8': '3', '9': '2', '0': '1'
+            };
+            
+            let currentOperation = 'encode'; // По умолчанию кодировка
+            
+            // Находим ВСЕ элементы
+            console.log("2. Ищу элементы...");
+            
+            const encodeBtn = document.getElementById('encodeBtn');
+            const decodeBtn = document.getElementById('decodeBtn');
+            const transformBtn = document.getElementById('transformBtn');
+            const numberInput = document.getElementById('numberInput');
+            const resultElement = document.getElementById('result');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            
+            // Проверяем, что ВСЕ элементы найдены
+            console.log("3. Проверка элементов:", {
+                encodeBtn: !!encodeBtn,
+                decodeBtn: !!decodeBtn,
+                transformBtn: !!transformBtn,
+                numberInput: !!numberInput,
+                resultElement: !!resultElement,
+                copyBtn: !!copyBtn,
+                clearBtn: !!clearBtn
+            });
+            
+            // Если какой-то элемент не найден - показываем ошибку
+            if (!encodeBtn || !decodeBtn || !transformBtn) {
+                alert("ОШИБКА: Не найдены кнопки! Проверьте HTML-код.");
+                return;
+            }
+            
+            console.log("4. Все элементы найдены, устанавливаю обработчики...");
+            
+            // 1. Кнопка "Закодировать"
+            encodeBtn.addEventListener('click', function() {
+                console.log("Нажата: Закодировать");
+                currentOperation = 'encode';
+                encodeBtn.classList.add('active');
+                decodeBtn.classList.remove('active');
+            });
+            
+            // 2. Кнопка "Раскодировать"
+            decodeBtn.addEventListener('click', function() {
+                console.log("Нажата: Раскодировать");
+                currentOperation = 'decode';
+                decodeBtn.classList.add('active');
+                encodeBtn.classList.remove('active');
+            });
+            
+            // 3. Основная кнопка преобразования
+            transformBtn.addEventListener('click', function() {
+                console.log("Нажата: Выполнить преобразование");
+                
+                const input = numberInput.value.trim();
+                console.log("Введенный текст:", input);
+                
+                // Проверка ввода
+                if (!input) {
+                    resultElement.textContent
+
+= "Введите число";
+                    resultElement.style.color = "red";
+                    return;
+                }
+                
+                // Проверка, что только цифры
+                if (!/^\d+$/.test(input)) {
+                    resultElement.textContent = "Только цифры (0-9)!";
+                    resultElement.style.color = "red";
+                    return;
+                }
+                
+                // Преобразование
+                let result = "";
+                for (let i = 0; i < input.length; i++) {
+                    const char = input[i];
+                    
+                    if (currentOperation === 'encode') {
+                        // Кодировка: замена по ключу
+                        result += key[char] || char;
+                    } else {
+                        // Декодировка: найти оригинальную цифру
+                        let found = false;
+                        for (const [original, replacement] of Object.entries(key)) {
+                            if (replacement === char) {
+                                result += original;
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) result += char;
+                    }
+                }
+                
+                console.log("Результат преобразования:", result);
+                resultElement.textContent = result;
+                resultElement.style.color = "green";
+            });
+            
+            // 4. Кнопка "Копировать"
+            copyBtn.addEventListener('click', function() {
+                const resultText = resultElement.textContent;
+                console.log("Копирование:", resultText);
+                
+                if (!resultText || resultText === "—") {
+                    alert("Сначала получите результат!");
+                    return;
+                }
+                
+                navigator.clipboard.writeText(resultText)
+                    .then(() => alert("Результат скопирован!"))
+                    .catch(err => console.error("Ошибка копирования:", err));
+            });
+            
+            // 5. Кнопка "Очистить"
+            clearBtn.addEventListener('click', function() {
+                console.log("Очистка полей");
+                numberInput.value = "";
+                resultElement.textContent = "—";
+                resultElement.style.color = "#333";
+                numberInput.focus();
+            });
+            
+            // 6. Обработка клавиши Enter в поле ввода
+            numberInput.addEventListener('keyup', function(event) {
+                if (event.key === 'Enter') {
+                    transformBtn.click();
+                }
+            });
+            
+            console.log("5. ВСЕ обработчики установлены. Приложение готово!");
+            console.log("=============================================");
+        });
+    </script>
+</body>
+</html>
