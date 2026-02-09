@@ -2,395 +2,168 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Шифратор чисел</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-        }
-        
-        h1 {
-            text-align: center;
-            color: #1e3c72;
-            margin-bottom: 5px;
-            font-size: 24px;
-        }
-        
-        .subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 25px;
-            font-size: 14px;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        input[type="text"] {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            font-size: 18px;
-            text-align: center;
-            transition: border 0.3s;
-            background: #f8f9fa;
-        }
-        
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #1e3c72;
-            background: white;
-        }
-        
-        .operation-buttons {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-        
-        .operation-btn {
-            flex: 1;
-            padding: 15px;
-            background: #e8eaf6;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            color: #1e3c72;
-        }
-        
-        .operation-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(30, 60, 114, 0.2);
-        }
-        
-        .operation-btn.active {
-            background: #1e3c72;
-            color: white;
-            box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
-        }
-        
-        #transformBtn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-bottom: 25px;
-            transition: all 0.3s;
-            letter-spacing: 1px;
-        }
-        
-        #transformBtn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(238, 90, 82, 0.4);
-        }
-        
-        .result-box {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px dashed #ddd;
-            margin-bottom: 20px;
-        }
-        
-        .result-label {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 10px;
-            display: block;
-        }
-        
-        #result {
-            font-size: 28px;
-            font-weight: 800;
-            color: #1e3c72;
-            min-height: 40px;
-            word-break: break-all;
-
-text-align: center;
-            padding: 10px 0;
-        }
-        
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .action-btn {
-            flex: 1;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        #copyBtn {
-            background: linear-gradient(135deg, #4ecdc4 0%, #44a08d 100%);
-            color: white;
-        }
-        
-        #clearBtn {
-            background: linear-gradient(135deg, #a8a8a8 0%, #7a7a7a 100%);
-            color: white;
-        }
-        
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #4ecdc4;
-            color: white;
-            padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            display: none;
-            z-index: 1000;
-        }
-        
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 22px;
-            }
-            
-            #result {
-                font-size: 24px;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background: #1a1a2e; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: white; border-radius: 15px; padding: 25px; width: 100%; max-width: 400px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        h1 { text-align: center; color: #16213e; margin-bottom: 5px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 18px; text-align: center; }
+        input:focus { outline: none; border-color: #0f4c75; }
+        .buttons { display: flex; gap: 10px; margin-bottom: 15px; }
+        button { flex: 1; padding: 15px; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; font-weight: bold; }
+        .op-btn { background: #e8e8e8; color: #333; }
+        .op-btn.active { background: #0f4c75; color: white; }
+        #goBtn { background: #ff6b6b; color: white; font-size: 18px; }
+        .result { background: #f1f3f4; padding: 20px; border-radius: 10px; margin-top: 15px; }
+        #output { font-size: 28px; font-weight: bold; color: #16213e; text-align: center; min-height: 40px; word-break: break-all; }
+        .action-btns { display: flex; gap: 10px; margin-top: 20px; }
+        #copyBtn { background: #1dd1a1; color: white; }
+        #clearBtn { background: #8395a7; color: white; }
     </style>
 </head>
 <body>
-    <div class="notification" id="notification">Текст скопирован!</div>
-    
     <div class="container">
-        <h1>🔐 Шифратор чисел</h1>
-        <p class="subtitle">Введите число и выберите операцию</p>
+        <h1>🔢 Шифратор чисел</h1>
+        <p class="subtitle">Верный ключ: 1→6 2→5 3→0 4→3 5→1 6→2 7→4 8→9 9→8 0→7</p>
         
-        <div class="input-group">
-            <label for="numberInput">Число для преобразования:</label>
-            <input type="text" id="numberInput" placeholder="Например: 123456" inputmode="numeric" maxlength="50">
+        <input type="text" id="inputNumber" placeholder="Введите число" maxlength="50" autofocus>
+        
+        <div class="buttons">
+            <button class="op-btn active" id="btnEncode">Закодировать</button>
+            <button class="op-btn" id="btnDecode">Раскодировать</button>
         </div>
         
-        <div class="operation-buttons">
-            <button class="operation-btn active" id="encodeBtn">🔒 Закодировать</button>
-            <button class="operation-btn" id="decodeBtn">🔓 Раскодировать</button>
+        <button id="goBtn">▶ ВЫПОЛНИТЬ</button>
+        
+        <div class="result">
+            <div style="color: #666; margin-bottom: 10px; text-align: center;">Результат:</div>
+            <div id="output">—</div>
         </div>
         
-        <button id="transformBtn">🔄 ВЫПОЛНИТЬ</button>
-        
-        <div class="result-box">
-            <span class="result-label">Результат:</span>
-            <div id="result">—</div>
-        </div>
-        
-        <div class="action-buttons">
-            <button class="action-btn" id="copyBtn">📋 Копировать</button>
-            <button class="action-btn" id="clearBtn">🗑 Стереть</button>
+        <div class="action-btns">
+            <button id="copyBtn">📋 Копировать</button>
+            <button id="clearBtn">🗑️ Очистить</button>
         </div>
     </div>
 
     <script>
-        // НОВЫЙ КЛЮЧ ЗАМЕНЫ по вашему запросу
-        const key = {
+        // ================== ТОЧНЫЙ КЛЮЧ ==================
+        const KEY = {
             '1': '6', '2': '5', '3': '0', '4': '3', '5': '1',
             '6': '2', '7': '4', '8': '9', '9': '8', '0': '7'
         };
         
-        let currentOperation = 'encode';
+        // ================== ТЕСТ КЛЮЧА ==================
+        console.log("=== ТЕСТ КЛЮЧА ===");
+        console.log("1 →", KEY['1'], "(должно быть 6)");
+        console.log("2 →", KEY['2'], "(должно быть 5)");
+        console.log("3 →", KEY['3'], "(должно быть 0)");
+        console.log("4 →", KEY['4'], "(должно быть 3)");
+        console.log("5 →", KEY['5'], "(должно быть 1)");
+        console.log("6 →", KEY['6'], "(должно быть 2)");
+        console.log("7 →", KEY['7'], "(должно быть 4)");
+        console.log("8 →", KEY['8'], "(должно быть 9)");
+        console.log("9 →", KEY['9'], "(должно быть 8)");
+        console.log("0 →", KEY['0'], "(должно быть 7)");
         
-        // Элементы
-        const encodeBtn = document.getElementById('encodeBtn');
-        const decodeBtn = document.getElementById('decodeBtn');
-        const transformBtn = document.getElementById('transformBtn');
-        const numberInput = document.getElementById('numberInput');
-        const resultElement = document.getElementById('result');
+        // Тест полного числа
+        const testNumber = "1234567890";
+        let testResult = "";
+        for (let i = 0; i < testNumber.length; i++) {
+            testResult += KEY[testNumber[i]];
+        }
+        console.log("Тест 1234567890 →", testResult, "(должно быть 6503124987)");
+
+// ================== ОБРАТНЫЙ КЛЮЧ ==================
+        const REVERSE_KEY = {};
+        for (let digit in KEY) {
+            REVERSE_KEY[KEY[digit]] = digit;
+        }
+        console.log("Обратный ключ:", REVERSE_KEY);
+        
+        // ================== ПЕРЕМЕННЫЕ ==================
+        let operation = 'encode';
+        
+        // ================== ЭЛЕМЕНТЫ ==================
+        const input = document.getElementById('inputNumber');
+        const output = document.getElementById('output');
+        const btnEncode = document.getElementById('btnEncode');
+        const btnDecode = document.getElementById('btnDecode');
+        const goBtn = document.getElementById('goBtn');
         const copyBtn = document.getElementById('copyBtn');
         const clearBtn = document.getElementById('clearBtn');
-        const notification = document.getElementById('notification');
         
-        // Функция показа уведомления
-        function showNotification(message, color = '#4ecdc4') {
-            notification.textContent = message;
-            notification.style.background = color;
-            notification.style.display = 'block';
-
-setTimeout(() => {
-                notification.style.display = 'none';
-            }, 2000);
-        }
-        
-        // Функция преобразования числа
-        function transformNumber(input, operation) {
-            let result = '';
+        // ================== ФУНКЦИИ ==================
+        function transform() {
+            const text = input.value.trim();
             
-            for (let i = 0; i < input.length; i++) {
-                const char = input[i];
+            if (!text) {
+                alert("Введите число");
+                return;
+            }
+            
+            if (!/^\d+$/.test(text)) {
+                alert("Только цифры 0-9!");
+                return;
+            }
+            
+            let result = "";
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
                 
                 if (operation === 'encode') {
-                    // Кодировка: заменяем цифру по ключу
-                    result += key[char] || char;
+                    result += KEY[char];
                 } else {
-                    // Декодировка: ищем оригинальную цифру
-                    let found = false;
-                    for (const [original, replacement] of Object.entries(key)) {
-                        if (replacement === char) {
-                            result += original;
-                            found = true;
-                            break;
-                        }
-                    }
-                    if (!found) result += char;
+                    result += REVERSE_KEY[char];
                 }
             }
             
-            return result;
+            output.textContent = result;
+            console.log(${operation}: ${text} → ${result});
         }
         
-        // 1. Кнопки выбора операции
-        encodeBtn.addEventListener('click', function() {
-            currentOperation = 'encode';
-            encodeBtn.classList.add('active');
-            decodeBtn.classList.remove('active');
-            numberInput.focus();
-        });
+        // ================== СОБЫТИЯ ==================
+        btnEncode.onclick = function() {
+            operation = 'encode';
+            btnEncode.classList.add('active');
+            btnDecode.classList.remove('active');
+        };
         
-        decodeBtn.addEventListener('click', function() {
-            currentOperation = 'decode';
-            decodeBtn.classList.add('active');
-            encodeBtn.classList.remove('active');
-            numberInput.focus();
-        });
+        btnDecode.onclick = function() {
+            operation = 'decode';
+            btnDecode.classList.add('active');
+            btnEncode.classList.remove('active');
+        };
         
-        // 2. Основное преобразование
-        transformBtn.addEventListener('click', function() {
-            const input = numberInput.value.trim();
-            
-            // Проверка ввода
-            if (!input) {
-                resultElement.textContent = "Введите число";
-                resultElement.style.color = "#ff6b6b";
-                showNotification("Введите число", "#ff6b6b");
-                return;
+        goBtn.onclick = transform;
+        
+        input.onkeyup = function(e) {
+            if (e.key === 'Enter') transform();
+        };
+        
+        copyBtn.onclick = function() {
+            const text = output.textContent;
+            if (text && text !== '—') {
+                navigator.clipboard.writeText(text);
+                alert("Скопировано: " + text);
             }
-            
-            // Проверка на цифры
-            if (!/^\d+$/.test(input)) {
-                resultElement.textContent = "Только цифры!";
-                resultElement.style.color = "#ff6b6b";
-                showNotification("Только цифры 0-9!", "#ff6b6b");
-                return;
-            }
-            
-            // Преобразование
-            const result = transformNumber(input, currentOperation);
-            resultElement.textContent = result;
-            resultElement.style.color = "#1e3c72";
-            
-            // Показать уведомление об успехе
-            const opName = currentOperation === 'encode' ? 'Закодировано' : 'Раскодировано';
-            showNotification(${opName}: ${input} → ${result}, "#1e3c72");
-        });
+        };
         
-        // 3. Копирование результата
-        copyBtn.addEventListener('click', function() {
-            const resultText = resultElement.textContent;
-            
-            if (!resultText  resultText === "—"  resultText.includes("Введите") || resultText.includes("Только")) {
-                showNotification("Сначала получите результат!", "#ff6b6b");
-                return;
-            }
-            
-            navigator.clipboard.writeText(resultText)
-                .then(() => {
-                    showNotification("Результат скопирован в буфер!", "#4ecdc4");
-                })
-                .catch(err => {
-                    showNotification("Ошибка копирования", "#ff6b6b");
-                    console.error("Copy error:", err);
-                });
-        });
+        clearBtn.onclick = function() {
+            input.value = '';
+            output.textContent = '—';
+            input.focus();
+        };
         
-        // 4. Очистка
-        clearBtn.addEventListener('click', function() {
-            numberInput.value = "";
-            resultElement.textContent = "—";
-            resultElement.style.color = "#1e3c72";
-
-numberInput.focus();
-            showNotification("Поля очищены", "#a8a8a8");
-        });
+        // Только цифры
+        input.oninput = function() {
+            this.value = this.value.replace(/\D/g, '');
+        };
         
-        // 5. Обработка клавиши Enter
-        numberInput.addEventListener('keyup', function(event) {
-            if (event.key === 'Enter') {
-                transformBtn.click();
-            }
-        });
-        
-        // 6. Автофокус при загрузке
-        window.addEventListener('load', function() {
-            numberInput.focus();
-        });
-        
-        // 7. Валидация ввода (только цифры)
-        numberInput.addEventListener('input', function() {
-            this.value = this.value.replace(/[^\d]/g, '');
-        });
-        
-        console.log("Приложение загружено с новым ключом!");
+        console.log("Приложение загружено. Ключ проверен.");
     </script>
 </body>
 </html>
