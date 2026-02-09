@@ -4,15 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Шифратор чисел</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#4f46e5">
     <style>
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            font-family: Arial, sans-serif;
         }
         
         body {
@@ -27,144 +24,106 @@
         .container {
             background: white;
             border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 30px;
             width: 100%;
             max-width: 500px;
-            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
             text-align: center;
-        }
-        
-        .header {
-            margin-bottom: 30px;
-        }
-        
-        .header h1 {
             color: #333;
-            font-size: 28px;
             margin-bottom: 10px;
         }
         
-        .header p {
+        .subtitle {
+            text-align: center;
             color: #666;
-            font-size: 16px;
+            margin-bottom: 20px;
         }
         
         .key-display {
-            background: #f8f9fa;
-            border-radius: 10px;
+            background: #f5f5f5;
             padding: 15px;
-            margin-bottom: 25px;
-            text-align: left;
-        }
-        
-        .key-display h3 {
-            color: #4f46e5;
-            margin-bottom: 10px;
-            font-size: 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
         }
         
         .key-pairs {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
+            margin-top: 10px;
         }
         
         .key-pair {
             background: white;
-            border-radius: 8px;
-            padding: 8px 12px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
         }
         
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
-        }
-        
-        input, select {
+        input, select, button {
             width: 100%;
             padding: 15px;
-            border: 2px solid #e0e0e0;
+            margin-bottom: 15px;
+            border: 2px solid #ddd;
             border-radius: 10px;
-            font-size: 18px;
-            transition: border 0.3s;
+            font-size: 16px;
         }
         
         input:focus, select:focus {
             outline: none;
-            border-color: #4f46e5;
+            border-color: #667eea;
         }
         
         .operation-buttons {
             display: flex;
             gap: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 15px;
         }
         
         .operation-btn {
             flex: 1;
-            padding: 15px;
+            background: #e0e0e0;
             border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .encode-btn {
-            background: #4f46e5;
-            color: white;
-        }
-        
-        .decode-btn {
-            background: #10b981;
-            color: white;
-        }
-        
-        .operation-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            font-weight: bold;
         }
         
         .operation-btn.active {
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+            background: #667eea;
+            color: white;
+        }
+        
+        #transformBtn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
         }
         
         .result-box {
-            background: #f8f9fa;
-            border-radius: 10px;
+            background: #f5f5f5;
             padding: 20px;
+            border-radius: 10px;
             margin-top: 20px;
-            text-align: left;
-        }
-        
-        .result-box h3 {
-color: #4f46e5;
-            margin-bottom: 10px;
         }
         
         #result {
             font-size: 24px;
             font-weight: bold;
-            word-break: break-all;
             color: #333;
-            min-height: 36px;
+            min-height: 30px;
+            word-break: break-all;
         }
         
         .action-buttons {
             display: flex;
             gap: 10px;
-            margin-top: 25px;
+            margin-top: 20px;
         }
         
         .action-btn {
@@ -172,14 +131,8 @@ color: #4f46e5;
             padding: 15px;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: all 0.3s;
+            font-weight: bold;
         }
         
         .copy-btn {
@@ -191,106 +144,65 @@ color: #4f46e5;
             background: #ef4444;
             color: white;
         }
-        
-        .action-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .footer {
-            margin-top: 30px;
-            color: #888;
-            font-size: 14px;
-        }
-        
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            
-            .operation-buttons {
-                flex-direction: column;
-            }
-            
-            .action-buttons {
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1><i class="fas fa-code"></i> Шифратор чисел</h1>
-            <p>Преобразуйте числа по заданному ключу</p>
-        </div>
+        <h1>🔐 Шифратор чисел</h1>
+        <p class="subtitle">Преобразование чисел по заданному ключу</p>
         
         <div class="key-display">
-            <h3><i class="fas fa-key"></i> Ключ замены:</h3>
+            <strong>Ключ замены:</strong>
             <div class="key-pairs">
-                <div class="key-pair">1 → 6</div>
-                <div class="key-pair">2 → 5</div>
-                <div class="key-pair">3 → 0</div>
-                <div class="key-pair">4 → 3</div>
-                <div class="key-pair">5 → 1</div>
-                <div class="key-pair">6 → 2</div>
-                <div class="key-pair">7 → 4</div>
-                <div class="key-pair">8 → 9</div>
-                <div class="key-pair">9 → 8</div>
-                <div class="key-pair">0 → 7</div>
+                <span class="key-pair">1 → 0</span>
+                <span class="key-pair">2 → 9</span>
+
+<span class="key-pair">3 → 8</span>
+                <span class="key-pair">4 → 7</span>
+                <span class="key-pair">5 → 6</span>
+                <span class="key-pair">6 → 5</span>
+                <span class="key-pair">7 → 4</span>
+                <span class="key-pair">8 → 3</span>
+                <span class="key-pair">9 → 2</span>
+                <span class="key-pair">0 → 1</span>
             </div>
         </div>
         
-        <div class="input-group">
-            <label for="numberInput"><i class="fas fa-pencil-alt"></i> Введите число:</label>
-            <input type="text" id="numberInput" placeholder="Например: 1234567890" inputmode="numeric">
-        </div>
+        <input type="text" id="numberInput" placeholder="Введите число (только цифры)" inputmode="numeric">
         
         <div class="operation-buttons">
-            <button class="operation-btn encode-btn active" id="encodeBtn">
-                <i class="fas fa-lock"></i> Закодировать
-            </button>
-            <button class="operation-btn decode-btn" id="decodeBtn">
-                <i class="fas fa-unlock"></i> Раскодировать
-            </button>
+            <button class="operation-btn active" id="encodeBtn">Закодировать</button>
+            <button class="operation-btn" id="decodeBtn">Раскодировать</button>
         </div>
         
-        <button class="operation-btn" id="transformBtn" style="background: #8b5cf6; color: white; width: 100%;">
-            <i class="fas fa-sync-alt"></i> Выполнить преобразование
-        </button>
+        <button id="transformBtn">🔄 Выполнить преобразование</button>
         
         <div class="result-box">
-            <h3><i class="fas fa-result"></i> Результат:</h3>
+            <strong>Результат:</strong>
             <div id="result">—</div>
         </div>
         
         <div class="action-buttons">
-            <button class="action-btn copy-btn" id="copyBtn">
-                <i class="far fa-copy"></i> Копировать
-            </button>
-            <button class="action-btn clear-btn" id="clearBtn">
-                <i class="fas fa-broom"></i> Очистить
-            </button>
-        </div>
-        
-        <div class="footer">
-            <p><i class="fas fa-info-circle"></i> Приложение работает полностью в вашем браузере. Никакие данные никуда не отправляются.</p>
+            <button class="action-btn copy-btn" id="copyBtn">📋 Копировать</button>
+            <button class="action-btn clear-btn" id="clearBtn">🗑️ Очистить</button>
         </div>
     </div>
-<script>
+
+    <script>
         // Ключ замены
         const key = {
             '1': '0', '2': '9', '3': '8', '4': '7', '5': '6',
             '6': '5', '7': '4', '8': '3', '9': '2', '0': '1'
         };
         
-        let currentOperation = 'encode'; // encode или decode
+        // Текущая операция
+        let currentOperation = 'encode';
         
         // Элементы
-        const numberInput = document.getElementById('numberInput');
         const encodeBtn = document.getElementById('encodeBtn');
         const decodeBtn = document.getElementById('decodeBtn');
         const transformBtn = document.getElementById('transformBtn');
+        const numberInput = document.getElementById('numberInput');
         const resultElement = document.getElementById('result');
         const copyBtn = document.getElementById('copyBtn');
         const clearBtn = document.getElementById('clearBtn');
@@ -299,57 +211,68 @@ color: #4f46e5;
         function transformNumber(input, operation) {
             let result = '';
             
-            for (let char of input.toString()) {
+            for (let i = 0; i < input.length; i++) {
+                const char = input[i];
+                
                 if (operation === 'encode') {
-                    // Кодировка: заменяем по ключу
+                    // Кодировка: заменяем цифру по ключу
                     result += key[char] || char;
                 } else {
-                    // Декодировка: ищем ключ по значению
-                    const foundKey = Object.keys(key).find(k => key[k] === char);
-                    result += foundKey || char;
+                    // Декодировка: ищем оригинальную цифру
+                    let found = false;
+                    for (const [original, replacement] of Object.entries(key)) {
+                        if (replacement === char) {
+                            result += original;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) result += char;
                 }
             }
             
             return result;
         }
         
-        // Обработчики кнопок операций
-        encodeBtn.addEventListener('click', () => {
+        // Обработчики кнопок
+        encodeBtn.addEventListener('click', function() {
             currentOperation = 'encode';
             encodeBtn.classList.add('active');
             decodeBtn.classList.remove('active');
         });
         
-        decodeBtn.addEventListener('click', () => {
+        decodeBtn.addEventListener('click', function() {
             currentOperation = 'decode';
             decodeBtn.classList.add('active');
             encodeBtn.classList.remove('active');
         });
         
-        // Основное преобразование
-        transformBtn.addEventListener('click', () => {
+        // Основная кнопка преобразования
+        transformBtn.addEventListener('click', function() {
             const input = numberInput.value.trim();
             
+            // Проверка ввода
             if (!input) {
                 resultElement.textContent = 'Введите число';
-                resultElement.style.color = '#ef4444';
+                resultElement.style.color = 'red';
                 return;
             }
-            
-            // Проверка, что введены только цифры
+
+// Проверка на цифры
             if (!/^\d+$/.test(input)) {
                 resultElement.textContent = 'Только цифры (0-9)!';
-                resultElement.style.color = '#ef4444';
+                resultElement.style.color = 'red';
                 return;
             }
             
+            // Преобразование
             const result = transformNumber(input, currentOperation);
             resultElement.textContent = result;
-            resultElement.style.color = '#10b981';
+            resultElement.style.color = 'green';
         });
         
         // Копирование результата
-        copyBtn.addEventListener('click', () => {
+        copyBtn.addEventListener('click', function() {
             const resultText = resultElement.textContent;
             
             if (resultText === '—'  resultText.includes('Введите')  resultText.includes('Только')) {
@@ -359,37 +282,27 @@ color: #4f46e5;
             
             navigator.clipboard.writeText(resultText)
                 .then(() => {
-                    const originalText = copyBtn.innerHTML;
-                    copyBtn.innerHTML = '<i class="fas fa-check"></i> Скопировано!';
-                    copyBtn.style.background = '#10b981';
-                    
-                    setTimeout(() => {
-                        copyBtn.innerHTML = originalText;
-                        copyBtn.style.background = '#3b82f6';
-                    }, 2000);
+                    alert('Результат скопирован в буфер!');
+                })
+                .catch(err => {
+                    alert('Не удалось скопировать: ' + err);
                 });
         });
         
         // Очистка
-        clearBtn.addEventListener('click', () => {
+        clearBtn.addEventListener('click', function() {
             numberInput.value = '';
             resultElement.textContent = '—';
             resultElement.style.color = '#333';
             numberInput.focus();
         });
-// Обработка Enter
-        numberInput.addEventListener('keyup', (event) => {
+        
+        // Обработка клавиши Enter
+        numberInput.addEventListener('keyup', function(event) {
             if (event.key === 'Enter') {
                 transformBtn.click();
             }
         });
-        
-        // Манифест для PWA
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js').catch(console.error);
-            });
-        }
     </script>
 </body>
 </html>
